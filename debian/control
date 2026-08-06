@@ -1,0 +1,12 @@
+Source: ros-jazzy-nanoflann
+Section: misc
+Priority: optional
+Maintainer: "Jose-Luis Blanco-Claraco" <joseluisblancoc@gmail.com>
+Build-Depends: debhelper (>= 9.0.0), cmake, libgtest-dev <!nocheck>, ros-jazzy-ros-workspace
+Homepage: https://github.com/jlblancoc/nanoflann
+Standards-Version: 3.9.2
+
+Package: ros-jazzy-nanoflann
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-jazzy-ros-workspace
+Description: nanoflann: a C++11 header-only library for Nearest Neighbor (NN) search with KD-trees, optimized for point clouds and Eigen matrices.
