@@ -1,3 +1,26 @@
+## nanoflann_vendor (kilted) - 1.12.1-1
+
+The packages in the `nanoflann_vendor` repository were released into the `kilted` distro by running `/home/jlblanco/code/bloom-venv/bin/bloom-release -y -r kilted nanoflann_vendor` on `Sat, 08 Aug 2026 08:56:49 -0000`
+
+The `nanoflann_vendor` package was released.
+
+Version of package(s) in repository `nanoflann_vendor`:
+
+- upstream repository: https://github.com/jlblancoc/nanoflann.git
+- release repository: unknown
+- rosdistro version: `null`
+- old version: `1.12.0-1`
+- new version: `1.12.1-1`
+
+Versions of tools used:
+
+- bloom version: `0.14.3`
+- catkin_pkg version: `0.5.2`
+- rosdep version: `0.22.2`
+- rosdistro version: `0.9.0`
+- vcstools version: `0.1.42`
+
+
 ## nanoflann_vendor (jazzy) - 1.12.1-1
 
 The packages in the `nanoflann_vendor` repository were released into the `jazzy` distro by running `/home/jlblanco/code/bloom-venv/bin/bloom-release -y -r jazzy nanoflann_vendor` on `Sat, 08 Aug 2026 08:54:47 -0000`
