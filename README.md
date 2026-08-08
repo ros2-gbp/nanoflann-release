@@ -1,3 +1,26 @@
+## nanoflann_vendor (humble) - 1.12.1-1
+
+The packages in the `nanoflann_vendor` repository were released into the `humble` distro by running `/home/jlblanco/code/bloom-venv/bin/bloom-release -y -r humble nanoflann_vendor` on `Sat, 08 Aug 2026 08:49:57 -0000`
+
+The `nanoflann_vendor` package was released.
+
+Version of package(s) in repository `nanoflann_vendor`:
+
+- upstream repository: https://github.com/jlblancoc/nanoflann.git
+- release repository: unknown
+- rosdistro version: `null`
+- old version: `1.12.0-1`
+- new version: `1.12.1-1`
+
+Versions of tools used:
+
+- bloom version: `0.14.3`
+- catkin_pkg version: `0.5.2`
+- rosdep version: `0.22.2`
+- rosdistro version: `0.9.0`
+- vcstools version: `0.1.42`
+
+
 ## nanoflann (rolling) - 1.12.0-1
 
 The packages in the `nanoflann` repository were released into the `rolling` distro by running `/home/jlblanco/code/bloom-venv/bin/bloom-release -y -r rolling nanoflann` on `Thu, 06 Aug 2026 16:50:16 -0000`
