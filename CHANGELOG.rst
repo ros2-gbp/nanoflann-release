@@ -2,6 +2,37 @@
 Changelog for package nanoflann
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.14.0 (2026-09-25)
+-------------------
+* Store kd-tree nodes in one contiguous std::vector instead of pointer-linked
+  allocations, shrinking Node and speeding up kNN queries and builds
+  (`#319 <https://github.com/jlblancoc/nanoflann/issues/319>`_).
+* Gather split coordinates once into a scratch array reused across builds,
+  avoiding a second pass over the dataset in middleSplit_().
+* Release node memory in freeIndex() and cap the node reservation at 2N.
+* loadIndex() now validates the loaded node array and rejects corrupt files.
+* Concurrent build: splice only the subtrees actually built by a task,
+  avoiding unnecessary memmoves.
+* Prefetch the right child while descending the tree, improving kNN
+  query speed.
+* CI Linux: do not upgrade runner packages before installing build tools
+  (`#320 <https://github.com/jlblancoc/nanoflann/issues/320>`_).
+* Contributors: Jose Luis Blanco-Claraco, Luca Bartoli
+
+1.13.0 (2026-09-17)
+-------------------
+* Merge pull request `#318 <https://github.com/jlblancoc/nanoflann/issues/318>`_ from spyridon97/improve-build-multithreading
+  Rewrite nanoflann's concurrent index build
+  At 16 threads, index build time drops ~3.5x on uniform data
+  (79ms -> 23ms) and ~3.8x on clustered data (108ms -> 29ms).
+* Merge pull request `#317 <https://github.com/jlblancoc/nanoflann/issues/317>`_ from jschueller/mtune
+  CMake: Check for mtune=native flag
+  For some archs like ppc64 this is not always available
+* Merge pull request `#315 <https://github.com/jlblancoc/nanoflann/issues/315>`_ from jlblancoc/fix/unsigned-elementtype-crash
+  Fix crash and wrong results with unsigned ElementType (alternative to `#314 <https://github.com/jlblancoc/nanoflann/issues/314>`_)
+* fix: compute all coordinate differences in DistanceType
+* Contributors: Jose Luis Blanco-Claraco, Julien Schueller, Spiros Tsalikis
+
 1.12.1 (2026-08-08)
 -------------------
 * docs: badges updates to use nanoflann_vendor
