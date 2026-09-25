@@ -118,6 +118,22 @@ Refer to the examples below or to the C++ API of [nanoflann::KDTreeSingleIndexAd
     * Can be used to receive a callback for each point found in range. This may be more efficient in some situations instead of building a huge vector of pairs with the results.
     * [nanoflann::KDTreeSingleIndexAdaptor<>](https://jlblancoc.github.io/nanoflann/classnanoflann_1_1KDTreeSingleIndexAdaptor.html)`::findWithinBox()` [New in 1.8.0]: Optimized search within a given axis-aligned bound box.
   * Working with 2D and 3D point clouds or N-dimensional data sets.
+  * Working with integral element types, including unsigned ones. Since
+    `_DistanceType` defaults to the element type and must be **signed**, an
+    unsigned element type requires passing it explicitly, wide enough for the
+    distances of the actual coordinate range, e.g.
+    `nanoflann::L2_Simple_Adaptor<uint8_t, MyCloud, int32_t>`. To use it
+    through the `nanoflann::metric_*` tags, define your own tag:
+    ```cpp
+    struct my_metric_L2 : public nanoflann::Metric
+    {
+        template <class T, class DataSource, typename IndexType = size_t>
+        struct traits
+        {
+            using distance_t = nanoflann::L2_Simple_Adaptor<T, DataSource, int32_t, IndexType>;
+        };
+    };
+    ```
   * Working directly with `Eigen::Matrix<>` classes (matrices and vectors-of-vectors).
   * Working with dynamic point clouds without a need to rebuild entire kd-tree index. Two options:
     * `nanoflann::KDTreeSingleIndexDynamicAdaptor<>`: the Bentley–Saxe "logarithmic forest" of static sub-trees.
@@ -202,7 +218,7 @@ The nanoflann port in vcpkg is kept up to date by Microsoft team members and com
 
   * **Index build**: pass `n_thread_build > 1` in `KDTreeSingleIndexAdaptorParams` to parallelize the build via `std::async` (unless `NANOFLANN_NO_THREADS` is defined).
   * **Queries**: `findNeighbors()`, `knnSearch()`, `radiusSearch()` and `rknnSearch()` are `const` and safe to call concurrently from multiple threads on the same index, as long as no thread is concurrently building or modifying it.
-  * The internal `PooledAllocator` is **not** thread-safe, so building an index from multiple threads (or mixing queries with an in-progress build) is not supported.
+  * Building an index from multiple threads (or mixing queries with an in-progress build) is not supported.
 
 ------
 
