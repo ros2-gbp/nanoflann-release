@@ -24,8 +24,10 @@ endif()
 # Test executable
 add_executable(nanoflann_unit_tests
   test_kdtree_basic.cpp
+  test_kdtree_concurrent_build.cpp
   test_kdtree_dynamic.cpp
   test_kdtree_incremental.cpp
+  test_kdtree_nodes.cpp
   test_main.cpp
 )
 set_target_properties(nanoflann_unit_tests PROPERTIES FOLDER "./")
