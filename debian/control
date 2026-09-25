@@ -1,0 +1,12 @@
+Source: ros-kilted-nanoflann-vendor
+Section: misc
+Priority: optional
+Maintainer: "Jose-Luis Blanco-Claraco" <joseluisblancoc@gmail.com>
+Build-Depends: debhelper (>= 9.0.0), cmake, libgtest-dev <!nocheck>, ros-kilted-ros-workspace
+Homepage: https://github.com/jlblancoc/nanoflann
+Standards-Version: 3.9.2
+
+Package: ros-kilted-nanoflann-vendor
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ros-kilted-ros-workspace
+Description: nanoflann: a C++11 header-only library for Nearest Neighbor (NN) search with KD-trees, optimized for point clouds and Eigen matrices.
