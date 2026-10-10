@@ -41,6 +41,9 @@
 
 #include "test_helpers.h"
 
+// Multithreaded builds throw when threads are disabled.
+#ifndef NANOFLANN_NO_THREADS
+
 namespace
 {
 using num_t   = double;
@@ -299,3 +302,5 @@ TEST(kdtree_concurrent_build, dynamic_index_identical_to_serial)
         checkDynamicConcurrentMatchesSerial(cloud, N / 10);
     }
 }
+
+#endif  // NANOFLANN_NO_THREADS
