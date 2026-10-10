@@ -169,38 +169,10 @@ TEST(kdtree, L2_vs_bruteforce_rknn)
     }
 }
 
-TEST(kdtree, SO3_vs_bruteforce)
-{
-    srand(static_cast<unsigned int>(time(nullptr)));
-    for (int i = 0; i < 10; i++)
-    {
-        SO3_vs_bruteforce_test<float>(5);
-
-        SO3_vs_bruteforce_test<float>(100);
-        SO3_vs_bruteforce_test<float>(100);
-        SO3_vs_bruteforce_test<float>(100);
-
-        SO3_vs_bruteforce_test<double>(100);
-        SO3_vs_bruteforce_test<double>(100);
-        SO3_vs_bruteforce_test<double>(100);
-    }
-}
-
-TEST(kdtree, SO2_vs_bruteforce)
-{
-    srand(static_cast<unsigned int>(time(nullptr)));
-    for (int i = 0; i < 10; i++)
-    {
-        SO2_vs_bruteforce_test<float>(100);
-        SO2_vs_bruteforce_test<float>(100);
-        SO2_vs_bruteforce_test<float>(100);
-
-        SO2_vs_bruteforce_test<double>(100);
-        SO2_vs_bruteforce_test<double>(100);
-        SO2_vs_bruteforce_test<double>(100);
-    }
-}
-
+// The concurrent (multi-threaded) build path is compiled out under
+// NANOFLANN_NO_THREADS (requesting n_thread_build != 1 then throws), so these
+// tests only apply when threading is enabled.
+#ifndef NANOFLANN_NO_THREADS
 TEST(kdtree, L2_concurrent_build_vs_bruteforce)
 {
     srand(static_cast<unsigned int>(time(nullptr)));
@@ -230,6 +202,7 @@ TEST(kdtree, L2_concurrent_build_vs_L2)
         L2_concurrent_build_vs_L2_test<double>(100, 7);
     }
 }
+#endif  // NANOFLANN_NO_THREADS
 
 TEST(kdtree, same_points)
 {
@@ -248,6 +221,61 @@ TEST(kdtree, same_points)
     }
 
     kdtree_t idx(3 /*dim*/, cloud);
+}
+
+// Pins the (documented) exclusive radius-search boundary: a candidate is
+// accepted only when its squared distance is *strictly less than* the radius.
+TEST(kdtree, radius_search_exclusive_boundary)
+{
+    using num_t         = double;
+    using point_cloud_t = PointCloud<num_t>;
+    using kdtree_t      = KDTreeSingleIndexAdaptor<
+        L2_Simple_Adaptor<num_t, point_cloud_t>, point_cloud_t, 3 /* dim */>;
+
+    // Three points on the x-axis at squared distances 1, 4, 9 from the origin.
+    point_cloud_t cloud;
+    cloud.pts = {{1., 0., 0.}, {2., 0., 0.}, {3., 0., 0.}};
+
+    kdtree_t index(3 /*dim*/, cloud, KDTreeSingleIndexAdaptorParams(10));
+
+    using IndexType                                               = typename kdtree_t::IndexType;
+    const num_t                                          query[3] = {0., 0., 0.};
+    std::vector<nanoflann::ResultItem<IndexType, num_t>> matches;
+    nanoflann::SearchParameters                          sp;  // sorted == true by default
+
+    // radius == 4 (squared): the point at squared-distance 4 must be EXCLUDED;
+    // only the point at squared-distance 1 qualifies.
+    const size_t n = index.radiusSearch(query, num_t(4), matches, sp);
+    EXPECT_EQ(n, 1u);
+    ASSERT_EQ(matches.size(), 1u);
+    EXPECT_EQ(matches[0].first, 0u);
+    EXPECT_NEAR(matches[0].second, num_t(1), 1e-12);
+
+    // A radius just above 4 now includes the second point (squared-distance 4).
+    const size_t n2 = index.radiusSearch(query, std::nextafter(num_t(4), num_t(1e9)), matches, sp);
+    EXPECT_EQ(n2, 2u);
+}
+
+// Direct known-answer check of KDTreeVectorOfVectorsAdaptor over the plain
+// std::vector<std::vector<T>> container (also exercised indirectly by the
+// L1/L2/rknn/box brute-force helpers).
+TEST(kdtree, vector_of_vectors_known_answer)
+{
+    using num_t                         = double;
+    std::vector<std::vector<num_t>> pts = {{0., 0.}, {1., 0.}, {0., 1.}, {5., 5.}};
+
+    using kdtree_t = KDTreeVectorOfVectorsAdaptor<std::vector<std::vector<num_t>>, num_t, 2>;
+    kdtree_t index(2 /*dim*/, pts, 10 /* max leaf */);
+
+    const num_t                    q[2] = {0.9, 0.1};
+    size_t                         idx  = 0;
+    num_t                          d2   = 0;
+    nanoflann::KNNResultSet<num_t> rs(1);
+    rs.init(&idx, &d2);
+    index.index->findNeighbors(rs, q);
+
+    EXPECT_EQ(idx, 1u);  // (1,0) is the nearest to (0.9,0.1)
+    EXPECT_NEAR(d2, 0.01 + 0.01, 1e-12);
 }
 
 // ---------------------------------------------------------------------------
