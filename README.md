@@ -1,3 +1,26 @@
+## nanoflann_vendor (lyrical) - 2.0.2-1
+
+The packages in the `nanoflann_vendor` repository were released into the `lyrical` distro by running `/usr/bin/bloom-release --rosdistro lyrical --track lyrical --no-web nanoflann_vendor` on `Sat, 14 Nov 2026 22:23:38 -0000`
+
+The `nanoflann_vendor` package was released.
+
+Version of package(s) in repository `nanoflann_vendor`:
+
+- upstream repository: https://github.com/jlblancoc/nanoflann.git
+- release repository: https://github.com/ros2-gbp/nanoflann-release.git
+- rosdistro version: `2.0.1-1`
+- old version: `2.0.1-1`
+- new version: `2.0.2-1`
+
+Versions of tools used:
+
+- bloom version: `0.14.4`
+- catkin_pkg version: `1.1.1`
+- rosdep version: `0.27.0`
+- rosdistro version: `1.1.0`
+- vcstools version: `0.1.42`
+
+
 ## nanoflann_vendor (kilted) - 2.0.2-1
 
 The packages in the `nanoflann_vendor` repository were released into the `kilted` distro by running `/usr/bin/bloom-release --rosdistro kilted --track kilted --no-web nanoflann_vendor` on `Sat, 14 Nov 2026 22:22:24 -0000`
